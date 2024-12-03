@@ -1,0 +1,23 @@
+included:
+  - Sources
+  - Tests
+  - Package.swift
+excluded:
+  - .build
+function_body_length:
+  - 100
+  - 200
+type_body_length:
+  - 1000
+  - 2000
+file_length:
+  warning: 1000
+  error: 2000
+large_tuple:
+  warning: 5
+  error: 10
+nesting:
+  type_level:
+    warning: 3
+  function_level:
+    warning: 3
