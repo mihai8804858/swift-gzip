@@ -4,7 +4,7 @@
 
 The framework uses `InputStream` and `OutputStream` for compression / decompression without the need to copy the whole data in memory. At most, the framework will allocate only 2 buffers of `256 kb` each for processing.
 
-[![CI](https://github.com/mihai8804858/swift-gzip/actions/workflows/ci.yml/badge.svg)](https://github.com/mihai8804858/swift-gzip/actions/workflows/ci.yml)
+[![CI](https://github.com/mihai8804858/swift-gzip/actions/workflows/ci.yml/badge.svg)](https://github.com/mihai8804858/swift-gzip/actions/workflows/ci.yml) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fmihai8804858%2Fswift-gzip%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/mihai8804858/swift-gzip) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fmihai8804858%2Fswift-gzip%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/mihai8804858/swift-gzip)
 
 ## Installation
 
