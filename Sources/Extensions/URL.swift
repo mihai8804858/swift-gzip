@@ -3,7 +3,7 @@ import Foundation
 extension URL {
     /// Whether the file at this `URL` is compressed in gzip format.
     public var isGzipped: Bool {
-        guard let stream = InputStream(url: self) else { return false }
+        guard let stream = InputStream(fileAtPath: path) else { return false }
         stream.open()
         defer { stream.close() }
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: GzipConstants.magicNumber.count)
