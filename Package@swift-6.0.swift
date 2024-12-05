@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -7,6 +7,7 @@ let package = Package(
     platforms: [
         .iOS(.v15),
         .tvOS(.v15),
+        .visionOS(.v1),
         .macOS(.v12),
         .macCatalyst(.v15),
         .watchOS(.v8)
@@ -17,7 +18,6 @@ let package = Package(
     targets: [
         .target(
             name: "SwiftGzip",
-            path: "Sources",
             resources: [.copy("Resources/PrivacyInfo.xcprivacy")],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
             linkerSettings: [.linkedLibrary("z")]
@@ -25,12 +25,11 @@ let package = Package(
         .testTarget(
             name: "SwiftGzipTests",
             dependencies: [.target(name: "SwiftGzip")],
-            path: "Tests",
             resources: [
                 .copy("Resources/test.png"),
                 .copy("Resources/test.png.gz")
             ]
         )
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v6]
 )
