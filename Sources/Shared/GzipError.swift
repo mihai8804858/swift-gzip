@@ -32,7 +32,7 @@ public struct GzipError: LocalizedError, Sendable {
     }
 
     init(code: Int32, msg: UnsafePointer<CChar>?) {
-        message = msg.flatMap(String.init(validatingCString:)) ?? "Unknown gzip error"
+        message = msg.flatMap(String.init(cString:)) ?? "Unknown gzip error"
         kind = Kind(code: code)
     }
 }
