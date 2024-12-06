@@ -1,12 +1,12 @@
-import Testing
+import XCTest
 import Foundation
 @testable import SwiftGzip
 
-@Suite struct URLTests {
-    @Test func isGzipped() async throws {
+final class URLTests: XCTestCase {
+    func testIsGzipped() async throws {
         try await inWorkingDir("url-is-gzipped") { _, zippedFileURL, unzippedFileURL in
-            #expect(zippedFileURL.isGzipped)
-            #expect(unzippedFileURL.isGzipped == false)
+            XCTAssert(zippedFileURL.isGzipped)
+            XCTAssertFalse(unzippedFileURL.isGzipped)
         }
     }
 }

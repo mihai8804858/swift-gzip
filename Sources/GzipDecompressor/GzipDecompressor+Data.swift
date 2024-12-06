@@ -9,7 +9,7 @@ extension GzipDecompressor {
     /// - Returns: Gzip-decompressed `Data` instance.
     /// - Throws: `GzipError`
     public func unzip(data: Data) async throws -> Data {
-        try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             do {
                 let data = try unzip(data: data)
                 continuation.resume(returning: data)

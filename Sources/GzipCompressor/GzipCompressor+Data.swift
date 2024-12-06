@@ -9,7 +9,7 @@ extension GzipCompressor {
     /// - Returns: Gzip-compressed `Data` instance.
     /// - Throws: `GzipError`
     public func zip(data: Data) async throws -> Data {
-        try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             do {
                 let data = try zip(data: data)
                 continuation.resume(returning: data)

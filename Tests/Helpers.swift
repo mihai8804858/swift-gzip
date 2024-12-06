@@ -1,5 +1,5 @@
 import Foundation
-import Testing
+import XCTest
 
 func inWorkingDir(
     _ name: String,
@@ -9,8 +9,8 @@ func inWorkingDir(
     let testWorkDir = rootWorkDir.appendingPathComponent(name)
     try remakeDir(at: testWorkDir)
     defer { try? FileManager.default.removeItem(at: testWorkDir) }
-    let sourceZippedFileURL = try #require(Bundle.module.resourceURL?.appendingPathComponent("test.png.gz"))
-    let sourceUnzippedFileURL = try #require(Bundle.module.resourceURL?.appendingPathComponent("test.png"))
+    let sourceZippedFileURL = try XCTUnwrap(Bundle.module.resourceURL?.appendingPathComponent("test.png.gz"))
+    let sourceUnzippedFileURL = try XCTUnwrap(Bundle.module.resourceURL?.appendingPathComponent("test.png"))
     let destinationZippedFileURL = testWorkDir.appendingPathComponent("test.png.gz")
     let destinationUnzippedFileURL = testWorkDir.appendingPathComponent("test.png")
     try FileManager.default.copyItem(at: sourceZippedFileURL, to: destinationZippedFileURL)

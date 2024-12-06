@@ -24,7 +24,10 @@ public struct GzipError: LocalizedError, Sendable {
 
     public let kind: Kind
     public let message: String
-    public var errorDescription: String? { message }
+
+    public var errorDescription: String? {
+        return message
+    }
 
     init(kind: Kind, message: String) {
         self.kind = kind

@@ -1,9 +1,9 @@
-import Testing
+import XCTest
 import Foundation
 @testable import SwiftGzip
 
-@Suite struct UInt8Tests {
-    @Test func isGzipped() async throws {
+final class UInt8Tests: XCTestCase {
+    func testIsGzipped() async throws {
         try await inWorkingDir("uint8-is-gzipped") { _, zippedFileURL, unzippedFileURL in
             let zippedData = try Data(contentsOf: zippedFileURL)
             let unzippedData = try Data(contentsOf: unzippedFileURL)
@@ -17,8 +17,8 @@ import Foundation
                 let bufferPointer = UnsafeBufferPointer(start: baseAddress, count: zippedData.count)
                 return [UInt8](bufferPointer)
             }
-            #expect(zippedBytes.isGzipped)
-            #expect(unzippedBytes.isGzipped == false)
+            XCTAssert(zippedBytes.isGzipped)
+            XCTAssertFalse(unzippedBytes.isGzipped)
         }
     }
 }
