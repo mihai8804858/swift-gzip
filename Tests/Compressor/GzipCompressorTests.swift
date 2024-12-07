@@ -8,7 +8,7 @@ final class GzipCompressorTests: XCTestCase {
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             try GzipCompressor().zip(inputURL: unzippedURL, outputURL: outputURL)
             let outputData = try Data(contentsOf: outputURL) as NSData
-            let expectedData = try Data(contentsOf: zippedURL) as NSData
+            let expectedData = try Data(contentsOf: zippedURL)
             XCTAssert(outputData.isEqual(to: expectedData))
         }
     }
@@ -18,7 +18,7 @@ final class GzipCompressorTests: XCTestCase {
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             try await GzipCompressor().zip(inputURL: unzippedURL, outputURL: outputURL)
             let outputData = try Data(contentsOf: outputURL) as NSData
-            let expectedData = try Data(contentsOf: zippedURL) as NSData
+            let expectedData = try Data(contentsOf: zippedURL)
             XCTAssert(outputData.isEqual(to: expectedData))
         }
     }
@@ -30,7 +30,7 @@ final class GzipCompressorTests: XCTestCase {
             let outputStream = try XCTUnwrap(OutputStream(toFileAtPath: outputURL.path, append: false))
             try GzipCompressor().zip(inputStream: inputStream, outputStream: outputStream)
             let outputData = try Data(contentsOf: outputURL) as NSData
-            let expectedData = try Data(contentsOf: zippedURL) as NSData
+            let expectedData = try Data(contentsOf: zippedURL)
             XCTAssert(outputData.isEqual(to: expectedData))
         }
     }
@@ -42,7 +42,7 @@ final class GzipCompressorTests: XCTestCase {
             let outputStream = try XCTUnwrap(OutputStream(toFileAtPath: outputURL.path, append: false))
             try await GzipCompressor().zip(inputStream: inputStream, outputStream: outputStream)
             let outputData = try Data(contentsOf: outputURL) as NSData
-            let expectedData = try Data(contentsOf: zippedURL) as NSData
+            let expectedData = try Data(contentsOf: zippedURL)
             XCTAssert(outputData.isEqual(to: expectedData))
         }
     }
@@ -51,7 +51,7 @@ final class GzipCompressorTests: XCTestCase {
         try await inWorkingDir("zip-data") { _, zippedURL, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let outputData = try GzipCompressor().zip(data: inputData)
-            let expectedData = try Data(contentsOf: zippedURL) as NSData
+            let expectedData = try Data(contentsOf: zippedURL)
             XCTAssert((outputData as NSData).isEqual(to: expectedData))
         }
     }
@@ -60,7 +60,7 @@ final class GzipCompressorTests: XCTestCase {
         try await inWorkingDir("zip-data-async") { _, zippedURL, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let outputData = try await GzipCompressor().zip(data: inputData)
-            let expectedData = try Data(contentsOf: zippedURL) as NSData
+            let expectedData = try Data(contentsOf: zippedURL)
             XCTAssert((outputData as NSData).isEqual(to: expectedData))
         }
     }

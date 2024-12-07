@@ -5,7 +5,7 @@ func inWorkingDir(
     _ name: String,
     work: (_ workDir: URL, _ zippedFileURL: URL, _ unzippedFileURL: URL) async throws -> Void
 ) async throws {
-    let rootWorkDir = URL.temporaryDirectory.appendingPathComponent("swift-gzip-tests")
+    let rootWorkDir = URL.tempDir.appendingPathComponent("swift-gzip-tests")
     let testWorkDir = rootWorkDir.appendingPathComponent(name)
     try remakeDir(at: testWorkDir)
     defer { try? FileManager.default.removeItem(at: testWorkDir) }
@@ -23,4 +23,22 @@ func remakeDir(at url: URL) throws {
         try FileManager.default.removeItem(at: url)
     }
     try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+}
+
+private extension URL {
+    static var tempDir: URL {
+        #if swift(>=5.9)
+        if #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *) {
+            URL.temporaryDirectory
+        } else {
+            FileManager.default.temporaryDirectory
+        }
+        #else
+        if #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *) {
+            URL.temporaryDirectory
+        } else {
+            FileManager.default.temporaryDirectory
+        }
+        #endif
+    }
 }
