@@ -29,15 +29,15 @@ private extension URL {
     static var tempDir: URL {
         #if swift(>=5.9)
         if #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *) {
-            URL.temporaryDirectory
+            return URL.temporaryDirectory
         } else {
-            FileManager.default.temporaryDirectory
+            return FileManager.default.temporaryDirectory
         }
         #else
         if #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *) {
-            URL.temporaryDirectory
+            return URL.temporaryDirectory
         } else {
-            FileManager.default.temporaryDirectory
+            return FileManager.default.temporaryDirectory
         }
         #endif
     }
