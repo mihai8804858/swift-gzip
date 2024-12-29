@@ -1,4 +1,4 @@
-public struct GzipDecompressor {
+public struct GzipDecompressor: Sendable {
     public let wBits: Int32
 
     /// Create a new `GzipDecompressor` instance.

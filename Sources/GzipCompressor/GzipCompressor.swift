@@ -1,4 +1,4 @@
-public struct GzipCompressor {
+public struct GzipCompressor: Sendable {
     public let level: CompressionLevel
     public let wBits: Int32
 
