@@ -5,11 +5,11 @@ import PackageDescription
 let package = Package(
     name: "swift-gzip",
     platforms: [
-        .iOS(.v15),
-        .tvOS(.v15),
+        .iOS(.v14),
+        .tvOS(.v14),
         .visionOS(.v1),
         .macOS(.v12),
-        .macCatalyst(.v15),
+        .macCatalyst(.v14),
         .watchOS(.v8)
     ],
     products: [
