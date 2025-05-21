@@ -74,7 +74,7 @@ let decompressor = GzipDecompressor()
 let unzipped = try await compressor.unzip(data: data)
 
 // Decompress `[UInt8]`
-let zipped = try await compressor.unzip(bytes: bytes)
+let unzipped = try await compressor.unzip(bytes: bytes)
 
 // Decompress file
 let inputURL = URL(...)
