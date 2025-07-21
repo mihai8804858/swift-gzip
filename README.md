@@ -71,20 +71,20 @@ try await compressor.zip(inputStream: inputStream, outputStream: outputStream)
 let decompressor = GzipDecompressor()
 
 // Decompress `Data`
-let unzipped = try await compressor.unzip(data: data)
+let unzipped = try await decompressor.unzip(data: data)
 
 // Decompress `[UInt8]`
-let unzipped = try await compressor.unzip(bytes: bytes)
+let unzipped = try await decompressor.unzip(bytes: bytes)
 
 // Decompress file
 let inputURL = URL(...)
 let outputURL = URL(...)
-try await compressor.unzip(inputURL: inputURL, outputURL: outputURL)
+try await decompressor.unzip(inputURL: inputURL, outputURL: outputURL)
 
 // Decompress data stream
 let inputStream = InputStream(...)
 let outputStream = OutputStream(...)
-try await compressor.unzip(inputStream: inputStream, outputStream: outputStream)
+try await decompressor.unzip(inputStream: inputStream, outputStream: outputStream)
 ```
 
 ## License
