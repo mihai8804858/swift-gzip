@@ -1,4 +1,8 @@
+#if os(Linux)
+import CZlib
+#else
 import zlib
+#endif
 
 public enum CompressionLevel: Hashable, Sendable {
     case noCompression

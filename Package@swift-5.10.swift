@@ -2,6 +2,51 @@
 
 import PackageDescription
 
+var targets: [PackageDescription.Target] = []
+
+// Declare CZlib only on Linux.
+#if os(Linux)
+targets.append(
+    .systemLibrary(
+        name: "CZlib",
+        path: "Sources/CZlib"
+    )
+)
+#endif
+
+var swiftGzipDependencies: [Target.Dependency] = []
+#if os(Linux)
+swiftGzipDependencies.append(.target(name: "CZlib"))
+#endif
+
+var swiftGzipLinkerSettings: [LinkerSetting] = []
+#if !os(Linux)
+// On Linux, CZlib's modulemap already links `-lz`.
+swiftGzipLinkerSettings.append(.linkedLibrary("z"))
+#endif
+
+targets.append(
+    .target(
+        name: "SwiftGzip",
+        dependencies: swiftGzipDependencies,
+        path: "Sources",
+        resources: [.copy("Resources/PrivacyInfo.xcprivacy")],
+        swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
+        linkerSettings: swiftGzipLinkerSettings
+    )
+)
+
+targets.append(
+    .testTarget(
+        name: "SwiftGzipTests",
+        dependencies: [.target(name: "SwiftGzip")],
+        resources: [
+            .copy("Resources/test.png"),
+            .copy("Resources/test.png.gz")
+        ]
+    )
+)
+
 let package = Package(
     name: "swift-gzip",
     platforms: [
@@ -15,21 +60,6 @@ let package = Package(
     products: [
         .library(name: "SwiftGzip", targets: ["SwiftGzip"])
     ],
-    targets: [
-        .target(
-            name: "SwiftGzip",
-            resources: [.copy("Resources/PrivacyInfo.xcprivacy")],
-            swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
-            linkerSettings: [.linkedLibrary("z")]
-        ),
-        .testTarget(
-            name: "SwiftGzipTests",
-            dependencies: [.target(name: "SwiftGzip")],
-            resources: [
-                .copy("Resources/test.png"),
-                .copy("Resources/test.png.gz")
-            ]
-        )
-    ],
+    targets: targets,
     swiftLanguageVersions: [.v5]
 )

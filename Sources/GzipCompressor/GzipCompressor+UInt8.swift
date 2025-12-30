@@ -1,5 +1,9 @@
 import Foundation
+#if os(Linux)
+import CZlib
+#else
 import zlib
+#endif
 
 extension GzipCompressor {
     /// Asynchronously compress bytes (`[UInt8]`) using `zlib`.
