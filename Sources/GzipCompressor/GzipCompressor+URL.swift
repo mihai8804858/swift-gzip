@@ -1,5 +1,9 @@
 import Foundation
+#if os(Linux)
+import CZlib
+#else
 import zlib
+#endif
 
 extension GzipCompressor {
     /// Asynchronously compress file at `inputURL` using `zlib` and save compressed file at `outputURL`.

@@ -1,5 +1,9 @@
 import Foundation
+#if os(Linux)
+import CZlib
+#else
 import zlib
+#endif
 
 extension GzipDecompressor {
     /// Asynchronously decompress `data` using `zlib`.

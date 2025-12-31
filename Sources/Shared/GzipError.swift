@@ -1,5 +1,9 @@
 import Foundation
+#if os(Linux)
+import CZlib
+#else
 import zlib
+#endif
 
 public struct GzipError: LocalizedError, Sendable {
     public enum Kind: Hashable, Sendable {

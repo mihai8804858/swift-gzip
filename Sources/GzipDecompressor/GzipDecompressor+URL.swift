@@ -1,5 +1,9 @@
 import Foundation
+#if os(Linux)
+import CZlib
+#else
 import zlib
+#endif
 
 extension GzipDecompressor {
     /// Asynchronously decompress file at `inputURL` using `zlib` and save decompressed file at `outputURL`.
