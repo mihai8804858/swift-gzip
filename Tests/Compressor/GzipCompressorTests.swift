@@ -4,7 +4,7 @@ import Foundation
 
 final class GzipCompressorTests: XCTestCase {
     func testZipURL() async throws {
-        try await inWorkingDir("zip-url") { workDir, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-url") { workDir, _, unzippedURL in
             let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             try await GzipCompressor().zip(inputURL: unzippedURL, outputURL: outputURL)
@@ -18,7 +18,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipURLAsync() async throws {
-        try await inWorkingDir("zip-url-async") { workDir, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-url-async") { workDir, _, unzippedURL in
             let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             try await GzipCompressor().zip(inputURL: unzippedURL, outputURL: outputURL)
@@ -30,7 +30,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipStream() async throws {
-        try await inWorkingDir("zip-stream") { workDir, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-stream") { workDir, _, unzippedURL in
             let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             let inputStream = try XCTUnwrap(InputStream(fileAtPath: unzippedURL.path))
@@ -44,7 +44,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipStreamAsync() async throws {
-        try await inWorkingDir("zip-stream-async") { workDir, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-stream-async") { workDir, _, unzippedURL in
             let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             let inputStream = try XCTUnwrap(InputStream(fileAtPath: unzippedURL.path))
@@ -58,7 +58,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipData() async throws {
-        try await inWorkingDir("zip-data") { _, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-data") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let outputData = try await GzipCompressor().zip(data: inputData)
             let unzippedOutput = try await GzipDecompressor().unzip(data: outputData)
@@ -67,7 +67,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipDataAsync() async throws {
-        try await inWorkingDir("zip-data-async") { _, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-data-async") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let outputData = try await GzipCompressor().zip(data: inputData)
             let unzippedOutput = try await GzipDecompressor().unzip(data: outputData)
@@ -76,7 +76,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipBytes() async throws {
-        try await inWorkingDir("zip-bytes") { _, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-bytes") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let inputBytes = inputData.withUnsafeBytes { buffer in
                 let baseAddress = buffer.bindMemory(to: UInt8.self).baseAddress
@@ -91,7 +91,7 @@ final class GzipCompressorTests: XCTestCase {
     }
 
     func testZipBytesAsync() async throws {
-        try await inWorkingDir("zip-bytes-async") { _, zippedURL, unzippedURL in
+        try await inWorkingDir("zip-bytes-async") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let inputBytes = inputData.withUnsafeBytes { buffer in
                 let baseAddress = buffer.bindMemory(to: UInt8.self).baseAddress

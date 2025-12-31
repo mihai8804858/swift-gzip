@@ -9,3 +9,4 @@ ignoreWords:
   - Bytef
   - Compressor
   - Decompressor
+  - modulemap
