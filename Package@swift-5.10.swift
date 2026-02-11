@@ -19,7 +19,7 @@ let package = Package(
         .target(
             name: "SwiftGzip",
             dependencies: [.target(name: "CZlib", condition: .when(platforms: [.linux]))],
-            path: "Sources",
+            path: "Sources/SwiftGzip",
             resources: [.copy("Resources/PrivacyInfo.xcprivacy")],
             swiftSettings: [.enableExperimentalFeature("StrictConcurrency")],
             linkerSettings: [.linkedLibrary("z", .when(platforms: [.iOS, .macOS, .macCatalyst, .tvOS, .visionOS, .watchOS]))]
