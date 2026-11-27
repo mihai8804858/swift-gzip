@@ -1,5 +1,5 @@
 import Foundation
-import XCTest
+import Testing
 
 func inWorkingDir(
     _ name: String,
@@ -9,8 +9,8 @@ func inWorkingDir(
     let testWorkDir = rootWorkDir.appendingPathComponent(name)
     try remakeDir(at: testWorkDir)
     defer { try? FileManager.default.removeItem(at: testWorkDir) }
-    let sourceZippedFileURL = try XCTUnwrap(Bundle.module.resourceURL?.appendingPathComponent("test.png.gz"))
-    let sourceUnzippedFileURL = try XCTUnwrap(Bundle.module.resourceURL?.appendingPathComponent("test.png"))
+    let sourceZippedFileURL = try #require(Bundle.module.resourceURL?.appendingPathComponent("test.png.gz"))
+    let sourceUnzippedFileURL = try #require(Bundle.module.resourceURL?.appendingPathComponent("test.png"))
     let destinationZippedFileURL = testWorkDir.appendingPathComponent("test.png.gz")
     let destinationUnzippedFileURL = testWorkDir.appendingPathComponent("test.png")
     try FileManager.default.copyItem(at: sourceZippedFileURL, to: destinationZippedFileURL)
@@ -27,18 +27,10 @@ func remakeDir(at url: URL) throws {
 
 private extension URL {
     static var tempDir: URL {
-        #if swift(>=5.9)
         if #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *) {
             return URL.temporaryDirectory
         } else {
             return FileManager.default.temporaryDirectory
         }
-        #else
-        if #available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *) {
-            return URL.temporaryDirectory
-        } else {
-            return FileManager.default.temporaryDirectory
-        }
-        #endif
     }
 }

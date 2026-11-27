@@ -1,107 +1,93 @@
-import XCTest
 import Foundation
+import Testing
 @testable import SwiftGzip
 
-final class GzipCompressorTests: XCTestCase {
-    func testZipURL() async throws {
+@Suite struct GzipCompressorTests {
+    // Don't compare gzip bytes directly: gzip output isn't guaranteed to be byte-identical
+    // across platforms/zlib builds (header fields, Huffman encoding choices, etc.).
+    // Instead, round-trip through the decompressor and compare with the original.
+
+    @Test func zipURL() async throws {
         try await inWorkingDir("zip-url") { workDir, _, unzippedURL in
-            let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             try await GzipCompressor().zip(inputURL: unzippedURL, outputURL: outputURL)
             let outputData = try Data(contentsOf: outputURL)
-            // Don't compare gzip bytes directly: gzip output isn't guaranteed to be byte-identical
-            // across platforms/zlib builds (header fields, Huffman encoding choices, etc.).
-            let unzippedOutput: Data = try await decompressor.unzip(data: outputData)
+            let unzippedOutput: Data = try await GzipDecompressor().unzip(data: outputData)
             let expectedUnzipped = try Data(contentsOf: unzippedURL)
-            XCTAssertEqual(unzippedOutput, expectedUnzipped)
+            #expect(unzippedOutput == expectedUnzipped)
         }
     }
 
-    func testZipURLAsync() async throws {
+    @Test func zipURLAsync() async throws {
         try await inWorkingDir("zip-url-async") { workDir, _, unzippedURL in
-            let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
             try await GzipCompressor().zip(inputURL: unzippedURL, outputURL: outputURL)
             let outputData = try Data(contentsOf: outputURL)
-            let unzippedOutput: Data = try await decompressor.unzip(data: outputData)
+            let unzippedOutput: Data = try await GzipDecompressor().unzip(data: outputData)
             let expectedUnzipped = try Data(contentsOf: unzippedURL)
-            XCTAssertEqual(unzippedOutput, expectedUnzipped)
+            #expect(unzippedOutput == expectedUnzipped)
         }
     }
 
-    func testZipStream() async throws {
+    @Test func zipStream() async throws {
         try await inWorkingDir("zip-stream") { workDir, _, unzippedURL in
-            let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
-            let inputStream = try XCTUnwrap(InputStream(fileAtPath: unzippedURL.path))
-            let outputStream = try XCTUnwrap(OutputStream(toFileAtPath: outputURL.path, append: false))
+            let inputStream = try #require(InputStream(fileAtPath: unzippedURL.path))
+            let outputStream = try #require(OutputStream(toFileAtPath: outputURL.path, append: false))
             try await GzipCompressor().zip(inputStream: inputStream, outputStream: outputStream)
             let outputData = try Data(contentsOf: outputURL)
-            let unzippedOutput: Data = try await decompressor.unzip(data: outputData)
+            let unzippedOutput: Data = try await GzipDecompressor().unzip(data: outputData)
             let expectedUnzipped = try Data(contentsOf: unzippedURL)
-            XCTAssertEqual(unzippedOutput, expectedUnzipped)
+            #expect(unzippedOutput == expectedUnzipped)
         }
     }
 
-    func testZipStreamAsync() async throws {
+    @Test func zipStreamAsync() async throws {
         try await inWorkingDir("zip-stream-async") { workDir, _, unzippedURL in
-            let decompressor = GzipDecompressor()
             let outputURL = workDir.appendingPathComponent("output.png.gz")
-            let inputStream = try XCTUnwrap(InputStream(fileAtPath: unzippedURL.path))
-            let outputStream = try XCTUnwrap(OutputStream(toFileAtPath: outputURL.path, append: false))
+            let inputStream = try #require(InputStream(fileAtPath: unzippedURL.path))
+            let outputStream = try #require(OutputStream(toFileAtPath: outputURL.path, append: false))
             try await GzipCompressor().zip(inputStream: inputStream, outputStream: outputStream)
             let outputData = try Data(contentsOf: outputURL)
-            let unzippedOutput: Data = try await decompressor.unzip(data: outputData)
+            let unzippedOutput: Data = try await GzipDecompressor().unzip(data: outputData)
             let expectedUnzipped = try Data(contentsOf: unzippedURL)
-            XCTAssertEqual(unzippedOutput, expectedUnzipped)
+            #expect(unzippedOutput == expectedUnzipped)
         }
     }
 
-    func testZipData() async throws {
+    @Test func zipData() async throws {
         try await inWorkingDir("zip-data") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let outputData = try await GzipCompressor().zip(data: inputData)
             let unzippedOutput = try await GzipDecompressor().unzip(data: outputData)
-            XCTAssertEqual(unzippedOutput, inputData)
+            #expect(unzippedOutput == inputData)
         }
     }
 
-    func testZipDataAsync() async throws {
+    @Test func zipDataAsync() async throws {
         try await inWorkingDir("zip-data-async") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
             let outputData = try await GzipCompressor().zip(data: inputData)
             let unzippedOutput = try await GzipDecompressor().unzip(data: outputData)
-            XCTAssertEqual(unzippedOutput, inputData)
+            #expect(unzippedOutput == inputData)
         }
     }
 
-    func testZipBytes() async throws {
+    @Test func zipBytes() async throws {
         try await inWorkingDir("zip-bytes") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
-            let inputBytes = inputData.withUnsafeBytes { buffer in
-                let baseAddress = buffer.bindMemory(to: UInt8.self).baseAddress
-                let bufferPointer = UnsafeBufferPointer(start: baseAddress, count: inputData.count)
-                return [UInt8](bufferPointer)
-            }
-            let outputBytes = try await GzipCompressor().zip(bytes: inputBytes)
-            let outputData = Data(outputBytes)
-            let unzippedOutput = try await GzipDecompressor().unzip(data: outputData)
-            XCTAssertEqual(unzippedOutput, inputData)
+            let outputBytes = try await GzipCompressor().zip(bytes: [UInt8](inputData))
+            let unzippedOutput = try await GzipDecompressor().unzip(data: Data(outputBytes))
+            #expect(unzippedOutput == inputData)
         }
     }
 
-    func testZipBytesAsync() async throws {
+    @Test func zipBytesAsync() async throws {
         try await inWorkingDir("zip-bytes-async") { _, _, unzippedURL in
             let inputData = try Data(contentsOf: unzippedURL)
-            let inputBytes = inputData.withUnsafeBytes { buffer in
-                let baseAddress = buffer.bindMemory(to: UInt8.self).baseAddress
-                let bufferPointer = UnsafeBufferPointer(start: baseAddress, count: inputData.count)
-                return [UInt8](bufferPointer)
-            }
-            let outputBytes = try await GzipCompressor().zip(bytes: inputBytes)
-            let outputData = Data(outputBytes)
-            let unzippedOutput = try await GzipDecompressor().unzip(data: outputData)
-            XCTAssertEqual(unzippedOutput, inputData)
+            let outputBytes = try await GzipCompressor().zip(bytes: [UInt8](inputData))
+            let unzippedOutput = try await GzipDecompressor().unzip(data: Data(outputBytes))
+            #expect(unzippedOutput == inputData)
         }
     }
 }
